@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+  <html lang="vi">
+  <head>
+  <meta charset="UTF-8">
+  <title>Lịch cá nhân</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Lịch Cá Nhân</h1>
+    <div id="clock"></div>
+    <!-- Thêm công việc -->
+    <div class="card">
+      <h2>Thêm công việc</h2>
+      <form method="POST" action="/add" class="task-form">
+        <input type="date" name="date" required>
+        <input type="text" name="name" placeholder="Tên công việc" required>
+        <br>
+        <div class="time-select">
+          <!-- Bắt đầu -->
+          <label>Bắt đầu:</label>
+          <input type="number" name="start_hour" min="0" max="23" placeholder="Giờ" required>
+          <input type="number" name="start_minute" min="0" max="59" placeholder="Phút" required>
+          <!-- Kết thúc-->
+          <label>Kết thúc:</label>
+          <input type="number" name="end_hour" min="0" max="23" placeholder="Giờ" required>
+          <input type="number" name="end_minute" min="0" max="59" placeholder="Phút" required>
+        </div>
+        <!-- Thêm công việc -->
+        <button type="submit">+ Thêm</button>
+      </form>
+    </div>
+
+    <!-- Danh sách tất cả công việc -->
+    <div class="card">
+      <h2>📋 Danh sách tất cả</h2>
+      <ul id="task-list">
+        {% for t in tasks %}
+          <li class="task-item" data-start="{{t.start}}" data-end="{{t.end}}">
+            {{t.date}} {{t.start}} → {{t.end}} | {{t.name}}
+            <a href="/delete/{{ loop.index0 }}" class="delete">🗑</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Sắp xếp lịch -->
+    <div class="card">
+      <h2>✅ Sắp xếp lịch</h2>
+      <form method="POST" action="/optimize">
+        <button type="submit" class="green">Tạo lịch</button>
+      </form>
+      <ul>
+        {% for t in optimal %}
+          <li>{{t.date}} {{t.start}} → {{t.end}} | {{t.name}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
